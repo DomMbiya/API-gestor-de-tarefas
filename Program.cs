@@ -1,7 +1,11 @@
 using Gestor_de_tarefas.Data;
+using Gestor_de_tarefas.Integração;
+using Gestor_de_tarefas.Integração.Interface;
+using Gestor_de_tarefas.Integração.Refit;
 using Gestor_de_tarefas.Repository;
 using Gestor_de_tarefas.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Refit;
 
 namespace Gestor_de_tarefas
 {
@@ -23,6 +27,13 @@ namespace Gestor_de_tarefas
                 );
             builder.Services.AddScoped<IUsuarioRepository, UsuarioRepositorio>();
             builder.Services.AddScoped<ITarefaRepository, TarefaRepositorio>();
+            builder.Services.AddScoped<IViaCepIntegracao, ViaCepIntegracao>();
+
+            builder.Services.AddRefitClient<IViaCepIntegracaoRefit>().ConfigureHttpClient(c =>
+            {
+                c.BaseAddress = new Uri("https://viacep.com.br/");
+
+            });
 
             var app = builder.Build();
 
